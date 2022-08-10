@@ -49,12 +49,23 @@ var fourthOption = document.querySelector("#opt4");
 var questionText = document.querySelector("#question-text");
 var optionsBox = document.querySelector("#options-box");
 var feedbackMsg = document.querySelector("#feedback");
-var timeLeft = 30;
+var timerEl = document.querySelector("#seconds");
+var timeLeft = 60;
 var currentQuestionIndex = 0;
 var totalPoints = 0;
-
+var timerInterval;
 //functions
-// function setTimer(timeLeft);
+function setTimer() {
+  timerInterval = setInterval(function () {
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+
+    if (timeLeft === 0) {
+      clearInterval(timerInterval);
+      gameOver();
+    }
+  }, 1000);
+}
 
 function newQuestion() {
   console.log(currentQuestionIndex);
@@ -69,43 +80,49 @@ function newQuestion() {
   fourthOption.style.display = "block";
 }
 
-// function gameOver();
+function gameOver() {
+  questionText.textContent =
+    "Game Over" + "\nFinal Score: " + totalPoints + " out of 50.";
+  firstOption.style.display = "none";
+  secondOption.style.display = "none";
+  thirdOption.style.display = "none";
+  fourthOption.style.display = "none";
+  feedbackMsg.textContent = "";
+}
 
 //event handlers
 
 //clicks start
 startButton.addEventListener("click", function () {
-  //starts time from 30 seconds
-  // setTimer(timeLeft);
+  //starts time from 60 seconds
+  setTimer();
   //hides start button
   startButton.style.display = "none";
   newQuestion();
-  console.log(question1.correct);
-  console.log(firstOption.id);
 });
 
 //answers question
 optionsBox.addEventListener("click", function (event) {
   event.preventDefault;
+  //if correct, adds points and displays message
   if (event.target.id === questionsArray[currentQuestionIndex].correct) {
     totalPoints = totalPoints + 10;
     feedbackMsg.textContent = "Correct!";
   } else {
-    // setTimer(timeLeft - 5);
+    //if incorrect, takes 10 seconds off and displays message
+    timeLeft = timeLeft - 10;
+    clearInterval(timerInterval);
+    setTimer();
     feedbackMsg.textContent = "Wrong.";
+    return timeLeft;
   }
 
+  //if there are more questions, displays next question, if not, ends the game
   if (currentQuestionIndex < questionsArray.length - 1) {
     currentQuestionIndex++;
     newQuestion();
   } else {
-    questionText.textContent =
-      "Game Over" + "\nFinal Score: " + totalPoints + " out of 50.";
-    firstOption.style.display = "none";
-    secondOption.style.display = "none";
-    thirdOption.style.display = "none";
-    fourthOption.style.display = "none";
-    feedbackMsg.textContent = "";
+    gameOver();
   }
 });
 //saves score at the end
