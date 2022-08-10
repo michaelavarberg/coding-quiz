@@ -1,21 +1,44 @@
 * {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   font-family: "Quicksand", sans-serif;
   font-family: "Roboto", sans-serif;
   font-family: "Roboto Condensed", sans-serif;
 }
 
+body,
 nav,
 main,
+div,
 #options-box {
   display: flex;
+}
+
+body {
+  align-items: center;
+}
+
+nav {
+  width: 100%;
+  justify-content: space-between;
+  background-color: lightgrey;
 }
 
 main {
   width: 50%;
   justify-content: left;
   align-items: start;
+  position: relative;
 }
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+}
+body,
 main,
 #options-box {
   flex-direction: column;
@@ -23,13 +46,30 @@ main,
 
 .button {
   cursor: pointer;
-  background-color: green;
+  background-color: rgb(168, 126, 163);
   box-shadow: 2px 2px 5px black;
   margin: 5px;
-  font-size: 200%;
+  font-size: 150%;
   padding: 10px;
+  border-radius: 4px;
+  color: white;
 }
 
 .button:hover {
   opacity: 0.8;
+}
+
+.option {
+  display: none;
+}
+
+.start {
+  background-color: rgb(24, 168, 24);
+  display: block;
+}
+
+#timer {
+  font-size: 120%;
+  padding: 5px;
+  margin: 15px;
 }
