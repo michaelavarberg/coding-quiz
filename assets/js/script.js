@@ -50,11 +50,20 @@ var questionText = document.querySelector("#question-text");
 var optionsBox = document.querySelector("#options-box");
 var feedbackMsg = document.querySelector("#feedback");
 var timerEl = document.querySelector("#seconds");
+var initials = document.querySelector("#initials");
+var initialsLabel = document.querySelector("#initials-label");
+var submitButton = document.querySelector("#submit-initials");
+var viewScoresEL = document.querySelector("#view-scores");
 var timeLeft = 60;
 var currentQuestionIndex = 0;
 var totalPoints = 0;
 var timerInterval;
-//functions
+var highScoresArray = [];
+var newUser = {
+  score: " ",
+  initials: " ",
+};
+
 function setTimer() {
   timerInterval = setInterval(function () {
     timeLeft--;
@@ -62,7 +71,7 @@ function setTimer() {
 
     if (timeLeft === 0) {
       clearInterval(timerInterval);
-      gameOver();
+      testOver();
     }
   }, 1000);
 }
@@ -80,18 +89,45 @@ function newQuestion() {
   fourthOption.style.display = "block";
 }
 
-function gameOver() {
+function testOver() {
+  clearInterval(timerInterval);
+  timerEl.textContent = "0";
   questionText.textContent =
-    "Game Over" + "\nFinal Score: " + totalPoints + " out of 50.";
+    "Test Over" + "\nFinal Score: " + totalPoints + " out of 50.";
   firstOption.style.display = "none";
   secondOption.style.display = "none";
   thirdOption.style.display = "none";
   fourthOption.style.display = "none";
   feedbackMsg.textContent = "";
+  initials.style.display = "block";
+  initialsLabel.style.display = "block";
+  submitButton.style.display = "block";
+
+  submitButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    if (initials.value === null) {
+      alert("Please type your initials in the box");
+    } else {
+      storeNewUser();
+      hideInitialsBox();
+      feedbackMsg.textContent = "Your score has been saved!";
+    }
+  });
 }
 
-//event handlers
+function hideInitialsBox() {
+  initials.style.display = "none";
+  initialsLabel.style.display = "none";
+  submitButton.style.display = "none";
+}
 
+function storeNewUser() {
+  newUser.score = totalPoints;
+  newUser.initials = initials.value;
+  highScoresArray.push(newUser);
+  console.log(highScoresArray);
+  localStorage.setItem("highScores", JSON.stringify(highScoresArray));
+}
 //clicks start
 startButton.addEventListener("click", function () {
   //starts time from 60 seconds
@@ -101,7 +137,7 @@ startButton.addEventListener("click", function () {
   newQuestion();
 });
 
-//answers question
+//clicks an answer option
 optionsBox.addEventListener("click", function (event) {
   event.preventDefault;
   //if correct, adds points and displays message
@@ -114,7 +150,6 @@ optionsBox.addEventListener("click", function (event) {
     clearInterval(timerInterval);
     setTimer();
     feedbackMsg.textContent = "Wrong.";
-    return timeLeft;
   }
 
   //if there are more questions, displays next question, if not, ends the game
@@ -122,9 +157,8 @@ optionsBox.addEventListener("click", function (event) {
     currentQuestionIndex++;
     newQuestion();
   } else {
-    gameOver();
+    testOver();
   }
 });
-//saves score at the end
 
 //clicks view high score (optional)

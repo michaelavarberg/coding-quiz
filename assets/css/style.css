@@ -9,7 +9,8 @@ body,
 nav,
 main,
 div,
-#options-box {
+#options-box,
+#feedback-box {
   display: flex;
 }
 
@@ -40,7 +41,8 @@ hr {
 }
 body,
 main,
-#options-box {
+#options-box,
+#feedback-box {
   flex-direction: column;
 }
 
@@ -72,4 +74,12 @@ main,
   font-size: 120%;
   padding: 5px;
   margin: 15px;
+}
+
+#initials,
+#initials-label,
+#submit-initials {
+  display: none;
+  font-size: larger;
+  padding: 10px;
 }
