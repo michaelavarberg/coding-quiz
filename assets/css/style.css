@@ -65,7 +65,8 @@ main,
   display: none;
 }
 
-.start {
+.start,
+#submit-initials {
   background-color: rgb(24, 168, 24);
   display: block;
 }
@@ -78,8 +79,13 @@ main,
 
 #initials,
 #initials-label,
-#submit-initials {
+#submit-initials,
+#exit {
   display: none;
   font-size: larger;
   padding: 10px;
+}
+
+#exit {
+  background-color: red;
 }

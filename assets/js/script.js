@@ -53,7 +53,8 @@ var timerEl = document.querySelector("#seconds");
 var initials = document.querySelector("#initials");
 var initialsLabel = document.querySelector("#initials-label");
 var submitButton = document.querySelector("#submit-initials");
-var viewScoresEL = document.querySelector("#view-scores");
+var viewScoresEl = document.querySelector("#view-scores");
+var exitButton = document.querySelector("#exit");
 var timeLeft = 60;
 var currentQuestionIndex = 0;
 var totalPoints = 0;
@@ -90,29 +91,14 @@ function newQuestion() {
 }
 
 function testOver() {
-  clearInterval(timerInterval);
-  timerEl.textContent = "0";
+  stopTest();
   questionText.textContent =
     "Test Over" + "\nFinal Score: " + totalPoints + " out of 50.";
-  firstOption.style.display = "none";
-  secondOption.style.display = "none";
-  thirdOption.style.display = "none";
-  fourthOption.style.display = "none";
+  hideTestContent();
   feedbackMsg.textContent = "";
   initials.style.display = "block";
   initialsLabel.style.display = "block";
   submitButton.style.display = "block";
-
-  submitButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    if (initials.value === null) {
-      alert("Please type your initials in the box");
-    } else {
-      storeNewUser();
-      hideInitialsBox();
-      feedbackMsg.textContent = "Your score has been saved!";
-    }
-  });
 }
 
 function hideInitialsBox() {
@@ -121,12 +107,55 @@ function hideInitialsBox() {
   submitButton.style.display = "none";
 }
 
+function hideTestContent() {
+  firstOption.style.display = "none";
+  secondOption.style.display = "none";
+  thirdOption.style.display = "none";
+  fourthOption.style.display = "none";
+}
+
+//parses the stored scores, adds newest score, sorts the scores array, and stores back in local storage
 function storeNewUser() {
+  var savedScores = localStorage.getItem("highScores");
+  highScoresArray = JSON.parse(savedScores);
   newUser.score = totalPoints;
   newUser.initials = initials.value;
   highScoresArray.push(newUser);
-  console.log(highScoresArray);
+  highScoresArray.sort((a, b) => {
+    if (a.score > b.score) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
+
   localStorage.setItem("highScores", JSON.stringify(highScoresArray));
+}
+
+function displayScores() {
+  //hide and show correct buttons
+  questionText.textContent = "";
+  startButton.style.display = "none";
+  exitButton.style.display = "block";
+  feedbackMsg.textContent = "High Scores:";
+  //get previous high scores from local storage and display them
+  var savedScores = localStorage.getItem("highScores");
+  highScoresArray = JSON.parse(savedScores);
+  for (var i = 0; i < highScoresArray.length; i++) {
+    var score = document.createElement("p");
+    score.textContent =
+      highScoresArray[i].initials +
+      ".........................." +
+      highScoresArray[i].score +
+      " points";
+    feedbackMsg.appendChild(score);
+  }
+}
+
+function stopTest() {
+  clearInterval(timerInterval);
+  timerEl.textContent = "0";
+  hideTestContent();
 }
 //clicks start
 startButton.addEventListener("click", function () {
@@ -140,25 +169,49 @@ startButton.addEventListener("click", function () {
 //clicks an answer option
 optionsBox.addEventListener("click", function (event) {
   event.preventDefault;
-  //if correct, adds points and displays message
-  if (event.target.id === questionsArray[currentQuestionIndex].correct) {
-    totalPoints = totalPoints + 10;
-    feedbackMsg.textContent = "Correct!";
-  } else {
-    //if incorrect, takes 10 seconds off and displays message
-    timeLeft = timeLeft - 10;
-    clearInterval(timerInterval);
-    setTimer();
-    feedbackMsg.textContent = "Wrong.";
-  }
+  console.log(event.target.className);
+  if (event.target.className === "button option") {
+    //if correct, adds points and displays message
+    if (event.target.id === questionsArray[currentQuestionIndex].correct) {
+      totalPoints = totalPoints + 10;
+      feedbackMsg.textContent = "Correct!";
+    } else {
+      //if incorrect, takes 10 seconds off and displays message
+      timeLeft = timeLeft - 10;
+      clearInterval(timerInterval);
+      setTimer();
+      feedbackMsg.textContent = "Wrong.";
+    }
 
-  //if there are more questions, displays next question, if not, ends the game
-  if (currentQuestionIndex < questionsArray.length - 1) {
-    currentQuestionIndex++;
-    newQuestion();
+    //if there are more questions, displays next question, if not, ends the game
+    if (currentQuestionIndex < questionsArray.length - 1) {
+      currentQuestionIndex++;
+      newQuestion();
+    } else {
+      testOver();
+    }
   } else {
-    testOver();
+    return;
   }
 });
 
 //clicks view high score (optional)
+viewScoresEl.addEventListener("click", function () {
+  stopTest();
+  displayScores();
+});
+
+exitButton.addEventListener("click", function () {
+  location.reload();
+});
+
+submitButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  if (initials.value === null) {
+    alert("Please type your initials in the box");
+  } else {
+    storeNewUser();
+    hideInitialsBox();
+    feedbackMsg.textContent = "Your score has been saved!";
+  }
+});
