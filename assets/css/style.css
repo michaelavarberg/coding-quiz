@@ -20,8 +20,7 @@ body {
 
 nav {
   width: 100%;
-  justify-content: space-between;
-  background-color: lightgrey;
+  flex-direction: column;
 }
 
 main {
@@ -30,15 +29,7 @@ main {
   align-items: start;
   position: relative;
 }
-hr {
-  display: block;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  margin-left: auto;
-  margin-right: auto;
-  border-style: inset;
-  border-width: 1px;
-}
+
 body,
 main,
 #options-box,
@@ -49,12 +40,13 @@ main,
 .button {
   cursor: pointer;
   background-color: rgb(168, 126, 163);
-  box-shadow: 2px 2px 5px black;
-  margin: 5px;
+  /* box-shadow: 2px 2px 5px black; */
+  margin: 7px;
   font-size: 150%;
   padding: 10px;
   border-radius: 4px;
   color: white;
+  /* border: none; */
 }
 
 .button:hover {
@@ -74,7 +66,7 @@ main,
 #timer {
   font-size: 120%;
   padding: 5px;
-  margin: 15px;
+  margin: 15px 15px 15px 5px;
 }
 
 #initials,
@@ -87,5 +79,10 @@ main,
 }
 
 #exit {
-  background-color: red;
+  background-color: rgb(218, 100, 100);
+}
+
+#view-scores {
+  background-color: rgb(142, 185, 226);
+  font-size: 100%;
 }

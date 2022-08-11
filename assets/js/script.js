@@ -42,6 +42,7 @@ var question5 = {
 };
 var questionsArray = [question1, question2, question3, question4, question5];
 var startButton = document.querySelector("#start-button");
+var quizDescription = document.querySelector("#quiz-description");
 var firstOption = document.querySelector("#opt1");
 var secondOption = document.querySelector("#opt2");
 var thirdOption = document.querySelector("#opt3");
@@ -57,7 +58,7 @@ var viewScoresEl = document.querySelector("#view-scores");
 var exitButton = document.querySelector("#exit");
 var firstSection = document.querySelector("#large-text");
 var finalScoreMsg = "";
-var timeLeft = 60;
+var timeLeft = 50;
 var currentQuestionIndex = 0;
 var totalPoints = 0;
 var timerInterval;
@@ -92,11 +93,15 @@ function newQuestion() {
   fourthOption.style.display = "block";
 }
 
+function hideElement() {
+  feedbackMsg.style.display = "none";
+}
+
 function testOver() {
   stopTest();
   questionText.textContent = "Test Over";
   finalScoreMsg = document.createElement("h2");
-  finalScoreMsg.textContent = "Final Score: " + totalPoints + " out of 50.";
+  finalScoreMsg.textContent = "Final Score: " + totalPoints + " out of 100.";
   firstSection.appendChild(finalScoreMsg);
   hideTestContent();
   feedbackMsg.textContent = "";
@@ -144,7 +149,9 @@ function displayScores() {
   //hide and show correct buttons
   questionText.textContent = "";
   startButton.style.display = "none";
+  quizDescription.style.display = "none";
   exitButton.style.display = "block";
+  feedbackMsg.style.display = "block";
   feedbackMsg.textContent = "High Scores:";
   finalScoreMsg.textContent = "";
   //get previous high scores from local storage and display them
@@ -173,6 +180,7 @@ startButton.addEventListener("click", function () {
   setTimer();
   //hides start button
   startButton.style.display = "none";
+  quizDescription.style.display = "none";
   newQuestion();
 });
 
@@ -185,12 +193,16 @@ optionsBox.addEventListener("click", function (event) {
     if (event.target.id === questionsArray[currentQuestionIndex].correct) {
       totalPoints = totalPoints + 10;
       feedbackMsg.textContent = "Correct!";
+      feedbackMsg.style.display = "block";
+      setTimeout(hideElement, 1000);
     } else {
       //if incorrect, takes 10 seconds off and displays message
       timeLeft = timeLeft - 10;
       clearInterval(timerInterval);
       setTimer();
       feedbackMsg.textContent = "Wrong.";
+      feedbackMsg.style.display = "block";
+      setTimeout(hideElement, 1000);
     }
 
     //if there are more questions, displays next question, if not, ends the game
@@ -198,6 +210,7 @@ optionsBox.addEventListener("click", function (event) {
       currentQuestionIndex++;
       newQuestion();
     } else {
+      totalPoints += timeLeft;
       testOver();
     }
   } else {
@@ -217,7 +230,10 @@ exitButton.addEventListener("click", function () {
 
 submitButton.addEventListener("click", function (event) {
   event.preventDefault();
-  if (initials.value === "") {
+  var string = initials.value;
+  string = string.trim();
+  string.slice(0, 2);
+  if (string === "") {
     alert("Please type your initials in the box");
   } else {
     storeNewUser();

@@ -16,15 +16,20 @@
   <body>
     <nav>
       <div>
-        <a href="#" id="view-scores">Click here to view high scores.</a>
+        <h1 id="timer">Time Remaining: <span id="seconds">50</span> seconds</h1>
       </div>
       <div>
-        <p id="timer">Time Remaining: <span id="seconds">60</span> seconds</p>
+        <button id="view-scores" class="button">High Scores</button>
       </div>
     </nav>
     <main id="container">
       <section id="large-text">
         <h1 id="question-text">Click start to begin your coding test.</h1>
+        <ul id="quiz-description">
+          <li>Each correct answer is worth 10 points.</li>
+          <li>Each incorrect answer subtracts 10 seconds off the clock.</li>
+          <li>Any time remaining will be added to your score.</li>
+        </ul>
       </section>
       <div id="options-box">
         <button id="opt1" class="button option">Option 1</button>
