@@ -55,6 +55,8 @@ var initialsLabel = document.querySelector("#initials-label");
 var submitButton = document.querySelector("#submit-initials");
 var viewScoresEl = document.querySelector("#view-scores");
 var exitButton = document.querySelector("#exit");
+var firstSection = document.querySelector("#large-text");
+var finalScoreMsg = "";
 var timeLeft = 60;
 var currentQuestionIndex = 0;
 var totalPoints = 0;
@@ -92,8 +94,10 @@ function newQuestion() {
 
 function testOver() {
   stopTest();
-  questionText.textContent =
-    "Test Over" + "\nFinal Score: " + totalPoints + " out of 50.";
+  questionText.textContent = "Test Over";
+  finalScoreMsg = document.createElement("h2");
+  finalScoreMsg.textContent = "Final Score: " + totalPoints + " out of 50.";
+  firstSection.appendChild(finalScoreMsg);
   hideTestContent();
   feedbackMsg.textContent = "";
   initials.style.display = "block";
@@ -117,7 +121,11 @@ function hideTestContent() {
 //parses the stored scores, adds newest score, sorts the scores array, and stores back in local storage
 function storeNewUser() {
   var savedScores = localStorage.getItem("highScores");
-  highScoresArray = JSON.parse(savedScores);
+  if (savedScores === null) {
+    highScoresArray = [];
+  } else {
+    highScoresArray = JSON.parse(savedScores);
+  }
   newUser.score = totalPoints;
   newUser.initials = initials.value;
   highScoresArray.push(newUser);
@@ -138,8 +146,10 @@ function displayScores() {
   startButton.style.display = "none";
   exitButton.style.display = "block";
   feedbackMsg.textContent = "High Scores:";
+  finalScoreMsg.textContent = "";
   //get previous high scores from local storage and display them
   var savedScores = localStorage.getItem("highScores");
+  console.log(savedScores);
   highScoresArray = JSON.parse(savedScores);
   for (var i = 0; i < highScoresArray.length; i++) {
     var score = document.createElement("p");
@@ -195,7 +205,7 @@ optionsBox.addEventListener("click", function (event) {
   }
 });
 
-//clicks view high score (optional)
+//clicks view high score
 viewScoresEl.addEventListener("click", function () {
   stopTest();
   displayScores();
@@ -207,7 +217,7 @@ exitButton.addEventListener("click", function () {
 
 submitButton.addEventListener("click", function (event) {
   event.preventDefault();
-  if (initials.value === null) {
+  if (initials.value === "") {
     alert("Please type your initials in the box");
   } else {
     storeNewUser();
