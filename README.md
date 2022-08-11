@@ -3,7 +3,7 @@ This wesbite presents a timed 5 question quiz about JavaScript syntax.
 Users are scored on their accuracy and speed. 
 Users can save their score and be added to the high scores list.  
 
-Deployed website link:
+Deployed website link: https://michaelavarberg.github.io/coding-quiz/
 
 Below are some screenshots of the quiz:
 
