@@ -1,5 +1,4 @@
 * {
-  /* border: 1px solid black; */
   font-family: "Quicksand", sans-serif;
   font-family: "Roboto", sans-serif;
   font-family: "Roboto Condensed", sans-serif;
@@ -16,6 +15,7 @@ div,
 
 body {
   align-items: center;
+  background-color: rgb(223, 245, 223);
 }
 
 nav {
@@ -28,6 +28,11 @@ main {
   justify-content: left;
   align-items: start;
   position: relative;
+  border: 1px solid black;
+  padding: 5px 15px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px black;
+  background-color: white;
 }
 
 body,
@@ -40,13 +45,11 @@ main,
 .button {
   cursor: pointer;
   background-color: rgb(168, 126, 163);
-  /* box-shadow: 2px 2px 5px black; */
   margin: 7px;
   font-size: 150%;
   padding: 10px;
   border-radius: 4px;
   color: white;
-  /* border: none; */
 }
 
 .button:hover {
